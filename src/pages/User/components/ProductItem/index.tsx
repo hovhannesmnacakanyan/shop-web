@@ -1,6 +1,7 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import { Typography } from "ui-kit";
 
 interface IProductItemProps {
   name: string;
@@ -9,10 +10,8 @@ interface IProductItemProps {
 
 const StyledItem = styled("div")`
   background-color: #eee;
-  border-radius: 4px;
   padding: 4px 8px;
   transition: background-color 0.8s ease-out;
-  margin-top: 8px;
 
   &:hover {
     background-color: #fff;
@@ -29,7 +28,7 @@ export const ProductItem = ({ name, index }: IProductItemProps) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          {name}
+          <Typography variant="body1">{name}</Typography>
         </StyledItem>
       )}
     </Draggable>

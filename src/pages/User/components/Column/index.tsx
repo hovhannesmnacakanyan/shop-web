@@ -3,39 +3,37 @@ import { ProductItem } from "../ProductItem";
 import { Droppable } from "react-beautiful-dnd";
 import { IColumn } from "pages/User";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
+import { Typography } from "ui-kit";
 
 interface IColumnProps {
   col: IColumn;
 }
 
 const StyledList = styled("div")`
-  background-color: #ddd;
-  border-radius: 8px;
-  padding: 16px;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  margin-top: 8px;
+  background-color: #ddd;
+  margin-top: 16px;
+  padding: 16px;
+  min-width: 500px;
+  min-height: 500px;
+  gap: 12px;
 `;
 
 const StyledColumn = styled("div")`
-  padding: 24px 0;
   display: flex;
   flex-direction: column;
-  margin-top: 8px;
-
-  h2: {
-    margin: 0;
-    padding: 0 16px;
-  }
 `;
 
 export const Column = ({ col }: IColumnProps) => {
+  const { t } = useTranslation();
+
   return (
     <Droppable droppableId={col.id}>
       {(provided) => (
         <StyledColumn>
-          <h2>{col.id}</h2>
+          <Typography variant="h5">{t(col.id)}</Typography>
           <StyledList {...provided.droppableProps} ref={provided.innerRef}>
             {col.list.map((item, index) => (
               <ProductItem key={item.name} name={item.name} index={index} />

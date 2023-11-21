@@ -21,5 +21,9 @@
   "unauthorized": "Invalid Email address or password",
   "welcome": "Welcome",
   "wrong.email.format": "Wrong Email format",
-  "or": "or"
+  "or": "or",
+  "products": "Products",
+  "cart": "Cart",
+  "total": "Total",
+  "buy": "Buy"
 }

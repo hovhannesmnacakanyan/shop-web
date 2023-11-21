@@ -3,6 +3,10 @@ import { Column } from "./components";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { IProduct } from "@types";
 import styled from "styled-components";
+import { Button, Typography } from "ui-kit";
+import { Wrapper } from "./styles";
+import { useTranslation } from "react-i18next";
+import { Box } from "@mui/material";
 
 export interface IColumn {
   id: string;
@@ -10,12 +14,10 @@ export interface IColumn {
 }
 
 const StyledColumns = styled("div")`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  margin: 10vh auto;
-  width: 80%;
-  height: 80vh;
-  gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
 `;
 
 const initialColumns: { [key: string]: IColumn } = {
@@ -37,6 +39,7 @@ const initialColumns: { [key: string]: IColumn } = {
 };
 
 const User = () => {
+  const { t } = useTranslation();
   const [columns, setColumns] = useState(initialColumns);
 
   const onDragEnd = ({ source, destination }: DropResult) => {
@@ -94,13 +97,19 @@ const User = () => {
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <StyledColumns>
-        {Object.values(columns).map((col) => (
-          <Column col={col} key={col.id} />
-        ))}
-      </StyledColumns>
-    </DragDropContext>
+    <Wrapper>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <StyledColumns>
+          {Object.values(columns).map((col) => (
+            <Column col={col} key={col.id} />
+          ))}
+        </StyledColumns>
+      </DragDropContext>
+      <Box display="flex" alignItems="center" gap={2} ml="auto">
+        <Typography variant="h6">{t("total")}: 15$</Typography>
+        <Button variant="contained">{t("buy")}</Button>
+      </Box>
+    </Wrapper>
   );
 };
 
