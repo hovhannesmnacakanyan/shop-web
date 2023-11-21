@@ -1,6 +1,6 @@
 export enum EnumRole {
   ADMIN = "admin",
-  USERS = "users",
+  USER = "user",
 }
 
 export enum EnumLeftPanelTabs {

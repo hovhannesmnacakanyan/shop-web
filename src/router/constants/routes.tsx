@@ -1,7 +1,8 @@
 import React from "react";
 import { EnumRole } from "@types";
 
-import { Users, Login, Admin } from "pages";
+import { User, Login, Admin, Registration } from "pages";
+import { PATHS } from "./paths";
 
 export interface IRoute {
   path: string;
@@ -16,7 +17,9 @@ export const LOGIN_USERS_ROUTES = (): IRoute[] => {
       path: `/${EnumRole.ADMIN}`,
       Element: Admin,
     },
-    { path: `/${EnumRole.USERS}`, Element: Users },
+    { path: `/${EnumRole.USER}`, Element: User },
+    { path: `/${EnumRole.USER}`, Element: User },
+    { path: `/${PATHS.REGISTRATION}`, Element: Registration },
   ];
 };
 

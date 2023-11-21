@@ -2,38 +2,43 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
-import { validateEmail } from "helpers";
+import { validateEmail, validatePassword } from "helpers";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { authOp } from "store/auth";
 import { globalSel, globalSlice } from "store/global";
 import { Button, Input, Typography } from "ui-kit";
 
 import { Wrapper } from "./styles";
-import { PATHS } from "router";
 
-interface ILoginValues {
+interface IRegistrationValues {
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
-const Login = () => {
+const Registration = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const initialValues: ILoginValues = {
+  const initialValues: IRegistrationValues = {
     email: "",
     password: "",
+    confirmPassword: "",
   };
 
   const [validateOnChange, setValidateOnChange] = useState(false);
 
   const isLoading = useAppSelector(globalSel.isLoadingSelector);
-  const isError = useAppSelector(globalSel.isErrorSelector);
 
-  const handleValidate = ({ email, password }: ILoginValues) => {
-    const errors: Partial<ILoginValues> = {};
+  const handleValidate = ({
+    email,
+    password,
+    confirmPassword,
+  }: IRegistrationValues) => {
+    const errors: Partial<IRegistrationValues> = {};
     const isValidEmail = validateEmail(email);
+    const isValidPassword = validatePassword(password);
 
     if (!email) {
       errors.email = t("required");
@@ -43,18 +48,34 @@ const Login = () => {
       errors.password = t("required");
     }
 
+    if (!confirmPassword) {
+      errors.confirmPassword = t("required");
+    }
+
     if (!isValidEmail && email !== "") {
       errors.email = t("wrong.email.format");
+    }
+
+    if (!isValidPassword && password !== "") {
+      errors.password = t("password.format");
+      return errors;
+    }
+
+    if (password !== confirmPassword) {
+      errors.confirmPassword = t("password.not.match");
+      return errors;
     }
 
     setValidateOnChange(true);
     return errors;
   };
 
-  const handleSubmit = (values: ILoginValues) => {
-    const { email, password } = values;
+  const handleSubmit = (values: IRegistrationValues) => {
+    const { email, password, confirmPassword } = values;
 
-    dispatch(authOp.login({ password, email }, navigate));
+    dispatch(
+      authOp.registration({ password, confirmPassword, email }, navigate)
+    );
   };
 
   useEffect(() => {
@@ -64,7 +85,7 @@ const Login = () => {
 
   return (
     <Wrapper>
-      <Typography variant="h6">{t("login")}</Typography>
+      <Typography variant="h6">{t("registration")}</Typography>
       <Formik
         initialValues={initialValues}
         validateOnChange={validateOnChange}
@@ -80,7 +101,7 @@ const Login = () => {
                   type="email"
                   label={t("email.address")}
                   name="email"
-                  error={isError || (!!errors.email && touched.email)}
+                  error={!!errors.email && touched.email}
                   helperText={
                     touched.email && errors.email && t("wrong.email.format")
                   }
@@ -92,8 +113,21 @@ const Login = () => {
                   type="password"
                   label={t("password")}
                   name="password"
-                  error={isError || (!!errors.password && touched.password)}
-                  helperText={isError && t("unauthorized")}
+                  error={!!errors.password && touched.password}
+                  disabled={isLoading}
+                  fullWidth
+                />
+                <Field
+                  component={Input}
+                  type="password"
+                  label={t("confirm.password")}
+                  name="confirmPassword"
+                  error={!!errors.confirmPassword && touched.confirmPassword}
+                  helperText={
+                    touched.confirmPassword &&
+                    !!errors.confirmPassword &&
+                    t("password.not.match")
+                  }
                   disabled={isLoading}
                   fullWidth
                 />
@@ -102,17 +136,6 @@ const Login = () => {
                   fullWidth
                   onClick={() => {
                     submitForm();
-                  }}
-                  isLoading={isLoading}
-                >
-                  {t("login")}
-                </Button>
-                {t("or")}
-                <Button
-                  variant="contained"
-                  fullWidth
-                  onClick={() => {
-                    navigate(`${PATHS.REGISTRATION}`);
                   }}
                   isLoading={isLoading}
                 >
@@ -127,4 +150,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Registration;

@@ -1,7 +1,13 @@
 import React from "react";
+import { Buyers, Products } from "./components";
 
 const Admin = () => {
-  return <div>Admin</div>;
+  return (
+    <div>
+      <Buyers />
+      <Products />
+    </div>
+  );
 };
 
 export default Admin;

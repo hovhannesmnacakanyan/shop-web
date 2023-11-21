@@ -2,6 +2,7 @@ import { lazy } from "react";
 
 const Login = lazy(() => import("./Login"));
 const Admin = lazy(() => import("./Admin"));
-const Users = lazy(() => import("./Users"));
+const User = lazy(() => import("./User"));
+const Registration = lazy(() => import("./Registration"));
 
-export { Users, Login, Admin };
+export { User, Login, Admin, Registration };

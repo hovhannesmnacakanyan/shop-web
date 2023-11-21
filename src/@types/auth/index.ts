@@ -4,8 +4,14 @@ export interface IAuthInitialState {
 }
 
 export interface ILoginBody {
-  username: string;
+  email: string;
   password: string;
+}
+
+export interface IRegistrationBody {
+  email: string;
+  password: string;
+  confirmPassword: string;
 }
 
 export interface IRegistrationRequestBody {

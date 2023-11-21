@@ -1,5 +1,5 @@
 import { AUTH_URL } from "@constants";
-import { ILoginBody, IRegistrationRequestBody } from "@types";
+import { EnumRole, ILoginBody, IRegistrationBody } from "@types";
 import { errorHandler, removeStorageItem, setStorageItem } from "helpers";
 import { HttpService } from "services";
 import { AppDispatch } from "store";
@@ -16,7 +16,7 @@ const login = (body: ILoginBody, navigate: (url: string) => void) => {
 
     try {
       const { data } = await HttpService({
-        url: `${AUTH_URL}/Login`,
+        url: `${AUTH_URL}/login`,
         method: "POST",
         body,
       });
@@ -25,6 +25,35 @@ const login = (body: ILoginBody, navigate: (url: string) => void) => {
       setStorageItem("accessToken", data.jwtToken);
       dispatch(setIsAuth(true));
       navigate(`/${data.role}`);
+    } catch (error: any) {
+      errorHandler(error, dispatch);
+    }
+
+    dispatch(setIsLoading(false));
+  };
+};
+
+const registration = (
+  body: IRegistrationBody,
+  navigate: (url: string) => void
+) => {
+  const { setIsLoading } = globalSlice.actions;
+  const { setIsAuth } = authSlice.actions;
+
+  return async (dispatch: AppDispatch) => {
+    dispatch(setIsLoading(true));
+
+    try {
+      const { data } = await HttpService({
+        url: `${AUTH_URL}/registration`,
+        method: "POST",
+        body,
+      });
+
+      setStorageItem("ROLE", data.role);
+      setStorageItem("accessToken", data.jwtToken);
+      dispatch(setIsAuth(true));
+      navigate(`/${EnumRole.USER}`);
     } catch (error: any) {
       errorHandler(error, dispatch);
     }
@@ -43,37 +72,8 @@ const logout = () => (dispatch: AppDispatch) => {
   window.location.replace("/");
 };
 
-const registrationRequest = (body: IRegistrationRequestBody) => {
-  const { setIsLoading, setSnackbar } = globalSlice.actions;
-
-  return async (dispatch: AppDispatch) => {
-    dispatch(setIsLoading(true));
-
-    try {
-      await HttpService({
-        url: `${AUTH_URL}/RegisterPartner`,
-        method: "POST",
-        body,
-      });
-
-      dispatch(
-        setSnackbar({
-          open: true,
-          title: "registration.request",
-          message: "registration.request.has.been.sent",
-          variant: "success",
-        })
-      );
-    } catch (error: any) {
-      errorHandler(error, dispatch);
-    }
-
-    dispatch(setIsLoading(false));
-  };
-};
-
 export const authOp = {
   login,
   logout,
-  registrationRequest,
+  registration,
 };
