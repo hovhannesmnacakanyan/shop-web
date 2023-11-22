@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
-import { validateEmail } from "helpers";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { authOp } from "store/auth";
 import { globalSel, globalSlice } from "store/global";
@@ -10,9 +9,10 @@ import { Button, Input, Typography } from "ui-kit";
 
 import { Wrapper } from "./styles";
 import { PATHS } from "router";
+import { getStorageItem } from "helpers";
 
 interface ILoginValues {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -20,9 +20,11 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const role = getStorageItem("ROLE");
+  const accessToken = getStorageItem("accessToken");
 
   const initialValues: ILoginValues = {
-    email: "",
+    username: "",
     password: "",
   };
 
@@ -31,20 +33,15 @@ const Login = () => {
   const isLoading = useAppSelector(globalSel.isLoadingSelector);
   const isError = useAppSelector(globalSel.isErrorSelector);
 
-  const handleValidate = ({ email, password }: ILoginValues) => {
+  const handleValidate = ({ username, password }: ILoginValues) => {
     const errors: Partial<ILoginValues> = {};
-    const isValidEmail = validateEmail(email);
 
-    if (!email) {
-      errors.email = t("required");
+    if (!username) {
+      errors.username = t("required");
     }
 
     if (!password) {
       errors.password = t("required");
-    }
-
-    if (!isValidEmail && email !== "") {
-      errors.email = t("wrong.email.format");
     }
 
     setValidateOnChange(true);
@@ -52,15 +49,21 @@ const Login = () => {
   };
 
   const handleSubmit = (values: ILoginValues) => {
-    const { email, password } = values;
+    const { username, password } = values;
 
-    dispatch(authOp.login({ password, email }, navigate));
+    dispatch(authOp.login({ password, username }, navigate));
   };
 
   useEffect(() => {
     dispatch(globalSlice.actions.setIsLoading(false));
     dispatch(globalSlice.actions.setIsError(false));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (role && accessToken) {
+      navigate(`${role}`);
+    }
+  }, [accessToken, navigate, role]);
 
   return (
     <Wrapper>
@@ -77,13 +80,9 @@ const Login = () => {
               <div className="form-section">
                 <Field
                   component={Input}
-                  type="email"
-                  label={t("email.address")}
-                  name="email"
-                  error={isError || (!!errors.email && touched.email)}
-                  helperText={
-                    touched.email && errors.email && t("wrong.email.format")
-                  }
+                  label={t("username")}
+                  name="username"
+                  error={isError || (!!errors.username && touched.username)}
                   disabled={isLoading}
                   fullWidth
                 />

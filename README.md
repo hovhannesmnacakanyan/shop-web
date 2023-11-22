@@ -1,6 +1,4 @@
-# Shop Admin panel
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Shop Admin WEB
 
 ## Available Scripts
 
@@ -22,8 +20,6 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
@@ -34,8 +30,11 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+## Used packages
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+[React](https://reactjs.org/).
+[Typescript](https://www.typescriptlang.org/).
+[Material UI](https://mui.com/).
+[Styled Components](https://styled-components.com/).
+[Formik](https://formik.org/).
+[i18next](https://www.i18next.com/).

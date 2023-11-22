@@ -6,7 +6,7 @@ export const errorHandler = (error: any, dispatch: AppDispatch) => {
   const { status, message } = error;
   const { setIsError } = globalSlice.actions;
 
-  if (status === 400 && message === "Duplicated Entity!") {
+  if (status === 404 || status === 422) {
     return dispatch(setIsError(true));
   }
 

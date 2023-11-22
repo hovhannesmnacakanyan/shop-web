@@ -1,12 +1,13 @@
 import React from "react";
 import { Buyers, Products } from "./components";
+import { Wrapper } from "./styles";
 
 const Admin = () => {
   return (
-    <div>
+    <Wrapper>
       <Buyers />
       <Products />
-    </div>
+    </Wrapper>
   );
 };
 

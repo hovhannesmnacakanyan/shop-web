@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Field, Form, Formik } from "formik";
-import { validateEmail, validatePassword } from "helpers";
+import { validatePassword } from "helpers";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { authOp } from "store/auth";
 import { globalSel, globalSlice } from "store/global";
@@ -11,7 +11,7 @@ import { Button, Input, Typography } from "ui-kit";
 import { Wrapper } from "./styles";
 
 interface IRegistrationValues {
-  email: string;
+  username: string;
   password: string;
   confirmPassword: string;
 }
@@ -22,7 +22,7 @@ const Registration = () => {
   const navigate = useNavigate();
 
   const initialValues: IRegistrationValues = {
-    email: "",
+    username: "",
     password: "",
     confirmPassword: "",
   };
@@ -32,16 +32,15 @@ const Registration = () => {
   const isLoading = useAppSelector(globalSel.isLoadingSelector);
 
   const handleValidate = ({
-    email,
+    username,
     password,
     confirmPassword,
   }: IRegistrationValues) => {
     const errors: Partial<IRegistrationValues> = {};
-    const isValidEmail = validateEmail(email);
     const isValidPassword = validatePassword(password);
 
-    if (!email) {
-      errors.email = t("required");
+    if (!username) {
+      errors.username = t("required");
     }
 
     if (!password) {
@@ -50,10 +49,6 @@ const Registration = () => {
 
     if (!confirmPassword) {
       errors.confirmPassword = t("required");
-    }
-
-    if (!isValidEmail && email !== "") {
-      errors.email = t("wrong.email.format");
     }
 
     if (!isValidPassword && password !== "") {
@@ -71,11 +66,9 @@ const Registration = () => {
   };
 
   const handleSubmit = (values: IRegistrationValues) => {
-    const { email, password, confirmPassword } = values;
+    const { username, password } = values;
 
-    dispatch(
-      authOp.registration({ password, confirmPassword, email }, navigate)
-    );
+    dispatch(authOp.register({ password, username }, navigate));
   };
 
   useEffect(() => {
@@ -98,13 +91,9 @@ const Registration = () => {
               <div className="form-section">
                 <Field
                   component={Input}
-                  type="email"
-                  label={t("email.address")}
-                  name="email"
-                  error={!!errors.email && touched.email}
-                  helperText={
-                    touched.email && errors.email && t("wrong.email.format")
-                  }
+                  label={t("username")}
+                  name="username"
+                  error={!!errors.username && touched.username}
                   disabled={isLoading}
                   fullWidth
                 />

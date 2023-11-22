@@ -21,6 +21,7 @@ export const HttpService = ({
     url,
     data: body,
     params,
+    withCredentials: true,
   };
 
   config.headers = {

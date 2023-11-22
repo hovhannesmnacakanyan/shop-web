@@ -1,5 +1,5 @@
 import { AUTH_URL } from "@constants";
-import { EnumRole, ILoginBody, IRegistrationBody } from "@types";
+import { ILoginBody, IRegistrationBody } from "@types";
 import { errorHandler, removeStorageItem, setStorageItem } from "helpers";
 import { HttpService } from "services";
 import { AppDispatch } from "store";
@@ -22,7 +22,7 @@ const login = (body: ILoginBody, navigate: (url: string) => void) => {
       });
 
       setStorageItem("ROLE", data.role);
-      setStorageItem("accessToken", data.jwtToken);
+      setStorageItem("accessToken", data.token);
       dispatch(setIsAuth(true));
       navigate(`/${data.role}`);
     } catch (error: any) {
@@ -33,27 +33,20 @@ const login = (body: ILoginBody, navigate: (url: string) => void) => {
   };
 };
 
-const registration = (
-  body: IRegistrationBody,
-  navigate: (url: string) => void
-) => {
+const register = (body: IRegistrationBody, navigate: (url: string) => void) => {
   const { setIsLoading } = globalSlice.actions;
-  const { setIsAuth } = authSlice.actions;
 
   return async (dispatch: AppDispatch) => {
     dispatch(setIsLoading(true));
 
     try {
-      const { data } = await HttpService({
-        url: `${AUTH_URL}/registration`,
+      await HttpService({
+        url: `${AUTH_URL}/register`,
         method: "POST",
         body,
       });
 
-      setStorageItem("ROLE", data.role);
-      setStorageItem("accessToken", data.jwtToken);
-      dispatch(setIsAuth(true));
-      navigate(`/${EnumRole.USER}`);
+      navigate("/");
     } catch (error: any) {
       errorHandler(error, dispatch);
     }
@@ -75,5 +68,5 @@ const logout = () => (dispatch: AppDispatch) => {
 export const authOp = {
   login,
   logout,
-  registration,
+  register,
 };

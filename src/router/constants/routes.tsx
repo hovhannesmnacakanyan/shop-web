@@ -18,7 +18,6 @@ export const LOGIN_USERS_ROUTES = (): IRoute[] => {
       Element: Admin,
     },
     { path: `/${EnumRole.USER}`, Element: User },
-    { path: `/${EnumRole.USER}`, Element: User },
     { path: `/${PATHS.REGISTRATION}`, Element: Registration },
   ];
 };

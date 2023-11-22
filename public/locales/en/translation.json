@@ -3,7 +3,7 @@
   "cancel": "Cancel",
   "confirm.password": "Confirm password",
   "create": "Create",
-  "email.address": "Email address",
+  "username": "Username",
   "equipment.created": "Equipment created",
   "equipment.edited": "Equipment edited",
   "has.been.created": " has been created.",
@@ -25,5 +25,14 @@
   "products": "Products",
   "cart": "Cart",
   "total": "Total",
-  "buy": "Buy"
+  "buy": "Buy",
+  "total.amount": "Total amount",
+  "date": "Date",
+  "search.by.name": "Search by name",
+  "buyers.history": "Buyers History",
+  "product.name": "Product name",
+  "product.price": "Product price",
+  "price.must.be.number": "Price must be a number",
+  "product.already.exist": "Product already exist",
+  "search": "Search"
 }
